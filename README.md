@@ -33,7 +33,7 @@
 
 - list - List all the key/value pairs in the AWS parameter store.
 
-- terse - A boolean flag that causes only the essential information to be outputted. 
+- terse - A boolean flag that causes only the essential information to be outputted.
 
 - value - The value of the key/value painr.
 
@@ -43,4 +43,38 @@ This tool is used to interact with the Amazon Simple Systems Manager (SSM) servi
 
 ### Examples
 
-- paramStore --add --key /aracade/bad_van/user --value "Bob Dobbs"
+- paramStore.py --Version
+
+    `paramStore.py version: 0.5`
+
+- paramStore --add --key /arcade/bad_van/user --value "Bob Dobbs"
+
+- parameter --list
+
+
+    {'Parameters': [{'DataType': 'text',
+        'LastModifiedDate': datetime.datetime(2021, 12, 21, 8, 9, 3, 120000,  tzinfo=tzlocal()),
+                   'LastModifiedUser': 'arn:aws:iam::541420744399:user/josef.grosch',
+                 'Name': '/arcade/bad_van/user',
+                 'Policies': [],
+                 'Tier': 'Standard',
+                 'Type': 'String',
+                 'Version': 1}],
+     'ResponseMetadata': {'HTTPHeaders': {'connection': 'keep-alive',
+                                      'content-length': '226',
+                                      'content-type': 'application/x-amz-json-1.1',
+                                      'date': 'Tue, 21 Dec 2021 16:10:04 GMT',
+                                      'server': 'Server',
+                                      'x-amzn-requestid': '107cc7e3-9a0c-4fab-a5c4-d49c6221d4ec'},
+                      'HTTPStatusCode': 200,
+                      'RequestId': '107cc7e3-9a0c-4fab-a5c4-d49c6221d4ec',
+                      'RetryAttempts': 0}}
+
+- paramStore.py --find --key /arcade/bad_van/user --terse
+
+      Data found
+        Key  : /arcade/bad_van/user
+        Value: Bob Dobbs
+
+
+- paramStore.py --delete --key /arcade/bad_van/user
