@@ -56,6 +56,19 @@ from botocore.exceptions import ClientError
 
 # -----------------------------------------------------------------------
 #
+# listParam
+#
+# -----------------------------------------------------------------------
+def listParam(ssmClient, args):
+    returnDict = ssmClient.describe_parameters()
+    
+    return returnDict
+    #
+    #
+    #
+
+# -----------------------------------------------------------------------
+#
 # deleteParam
 #
 # -----------------------------------------------------------------------
@@ -151,6 +164,11 @@ def processReturnDict(returnDict, args):
         else:
             print("ERROR: status code {} returned".format(statusCode))
         #
+    elif args.list:
+        l = 0
+        statusCode = returnDict['ResponseMetadata']['HTTPStatusCode']
+        if statusCode == 200:
+            pprint.pprint(returnDict)
     elif args.find:
         k = 0
         statusCode = returnDict['ResponseMetadata']['HTTPStatusCode']
@@ -188,33 +206,35 @@ def main():
     toolName   = os.path.basename(__file__)
     AWS_REGION = os.environ.get('AWS_DEFAULT_REGION')
 
+    # --arcade - /arcade/{arcade_name}/{key}
+
     ssmClient = boto3.client("ssm", region_name=AWS_REGION)
 
     parser = argparse.ArgumentParser(toolName)
 
-    parser.add_argument('--add', help='Add key / value pair',
-                        action='store_true')
-
-    # --arcade - /arcade/{arcade_name}/{key}
-    
-    parser.add_argument('--debug', help='Turn on debugging output',
+    parser.add_argument('-a', '--add', help='Add key / value pair',
                         action='store_true')
     
-    parser.add_argument('--delete', help='Delete key / value pair',
+    parser.add_argument('-d', '--debug', help='Turn on debugging output',
+                        action='store_true')
+    
+    parser.add_argument('-D', '--delete', help='Delete key / value pair',
                         action='store_true')
 
-    parser.add_argument('--find', help='Find a key / value pair',
+    parser.add_argument('-f', '--find', help='Find a key / value pair',
                         action='store_true')
 
-    parser.add_argument('--key', help='Parameter store key. (required)',
-                        required=False) 
-
-    parser.add_argument('--terse', help='Terse output',
+    parser.add_argument('-k', '--key', help='Parameter store key.')
+    
+    parser.add_argument('-l', '--list', help='List arameter store key.',
+                        action='store_true')
+    
+    parser.add_argument('-t', '--terse', help='Terse output',
                         action='store_true')
 
-    parser.add_argument('--value', help='Value to be stored')
+    parser.add_argument('-v', '--value', help='Value to be stored')
 
-    parser.add_argument('--version', help='Version of tool',
+    parser.add_argument('-V', '--version', help='Version of tool',
                         action='store_true')
 
     args = parser.parse_args()
@@ -258,8 +278,14 @@ def main():
         print(f"{toolName} version: {version}")
         exitCode = 0
         # End of version
+    elif args.list:
+        returnDict = listParam(ssmClient, args)
+        processReturnDict(returnDict, args)
+        # End of list
     else:
         print("How did we get here ?")
+        print("No argument provided.")
+        # 0x57 0x54 0x46 == WTF
         exitCode = 5723206 # WTF
         
         
