@@ -147,7 +147,6 @@ def findParam(ssmClient, args):
 # -----------------------------------------------------------------------
 def processReturnDict(returnDict, args):
     if args.add:
-        i = 0
         statusCode = returnDict['ResponseMetadata']['HTTPStatusCode']
         if statusCode == 200:
             if args.debug:
@@ -156,7 +155,6 @@ def processReturnDict(returnDict, args):
             print("ERROR: status code {} returned".format(statusCode))
         #
     elif args.delete:
-        j = 0
         statusCode = returnDict['ResponseMetadata']['HTTPStatusCode']
         if statusCode == 200:
             if args.debug:
@@ -165,12 +163,10 @@ def processReturnDict(returnDict, args):
             print("ERROR: status code {} returned".format(statusCode))
         #
     elif args.list:
-        l = 0
         statusCode = returnDict['ResponseMetadata']['HTTPStatusCode']
         if statusCode == 200:
             pprint.pprint(returnDict)
     elif args.find:
-        k = 0
         statusCode = returnDict['ResponseMetadata']['HTTPStatusCode']
         if statusCode == 200:
             if args.terse:
@@ -226,7 +222,7 @@ def main():
 
     parser.add_argument('-k', '--key', help='Parameter store key.')
     
-    parser.add_argument('-l', '--list', help='List arameter store key.',
+    parser.add_argument('-l', '--list', help='List parameter store key.',
                         action='store_true')
     
     parser.add_argument('-t', '--terse', help='Terse output',
